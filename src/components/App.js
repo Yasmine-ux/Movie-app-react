@@ -3,6 +3,10 @@ import '../App.css';
 import SearchBox from './SearchBox';
 import Rating from './Rating';
 import MovieList from './MovieList';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Modale from './Modal';
+import UpdateComponent from './Wrapped';
+import {Spinner} from 'react-bootstrap'
 
 const Inception = 
     {title:'Inception', 
@@ -36,12 +40,12 @@ class  App extends Component{
       searchTerm:''
     }
   }
-  addNewMovie(newMovie) {
+  addNewMovie=(newMovie)=> {
     this.setState({
-      movies: this.state.movies.concat(newMovie)
+      movies: [...this.state.movies,newMovie]
     })
   }
-  MovieFilterRating () {
+  MovieFilterRating =() =>{
     return (
       this.state.movies.filter (
         el => 
@@ -50,6 +54,13 @@ class  App extends Component{
     )
   }
   render (){
+    if (this.props.loading === true){
+      return (
+        <Spinner animation="border" role="status">
+        <span className="sr-only">Loading...</span>
+      </Spinner>
+      )
+       }else {
   return (
     <div className="Movie-app">
       <header className='Movie-app-header'>
@@ -67,11 +78,10 @@ class  App extends Component{
         />
       </header>
       <main className='movie-app-main'>
-        <MovieList movies={this.MovieFilterRating()}
-        onAddMovie={(newMovie) => this.addNewMovie(newMovie)}
-        />
+        <MovieList movies={this.MovieFilterRating()}/>
+        <Modale add={this.addNewMovie}/>
       </main>
     </div>
     )
-}}
-export default App;
+}}}
+export default UpdateComponent(App);
